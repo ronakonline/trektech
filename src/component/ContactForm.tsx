@@ -16,9 +16,7 @@ const ContactForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submissions, setSubmissions] = useState<(typeof formData)[]>([]);
 
-  const handleChange = (
-    e: any
-  ) => {
+  const handleChange = (e: any) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
     setErrors((prev) => ({ ...prev, [id]: "" }));
@@ -40,17 +38,56 @@ const ContactForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   https://formspree.io/f/myzdbldg
+  //   if (validate()) {
+  //     console.log("Form submitted:", formData);
+
+  //     // Save to list
+  //     setSubmissions((prev) => [...prev, formData]);
+
+  //     toast.success("Form submitted successfully!", { position: "top-center" });
+
+  //     setFormData(initialState);
+  //   }
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (validate()) {
-      console.log("Form submitted:", formData);
+      try {
+        // Send data to Formspree
+        const response = await fetch("https://formspree.io/f/xzzakyyb", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
-      // Save to list
-      setSubmissions((prev) => [...prev, formData]);
+        if (response.ok) {
+          console.log("Form submitted:", formData);
 
-      toast.success("Form submitted successfully!", { position: "top-center" });
+          // Save to local list
+          setSubmissions((prev) => [...prev, formData]);
 
-      setFormData(initialState);
+          toast.success("Form submitted successfully!", {
+            position: "top-center",
+          });
+
+          // Reset form
+          setFormData(initialState);
+        } else {
+          toast.error("Failed to submit the form. Please try again.", {
+            position: "top-center",
+          });
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        toast.error("Something went wrong!", { position: "top-center" });
+      }
     }
   };
 

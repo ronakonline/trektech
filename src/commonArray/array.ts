@@ -67,19 +67,6 @@ export const trektechFeatureList = [
   },
 ];
 
-// export const TechnologyPatner = [
-//   { id: "microsoft", tech: "Microsoft" },
-//   { id: 2, tech: "Adobe" },
-//   { id: 3, tech: "Trend Micro" },
-//   { id: 4, tech: "Acronis" },
-//   { id: 5, tech: "Fortinet" },
-//   { id: 6, tech: "Zoho" },
-//   { id: 7, tech: "Google" },
-//   { id: 8, tech: "AutoCAD" },
-//   { id: 9, tech: "Accops" },
-//   { id: 10, tech: "Sophos" },
-// ];
-
 export const TechnologyPatner = [
   { id: "microsoft", tech: "Microsoft" },
   { id: "adobe", tech: "Adobe" },
