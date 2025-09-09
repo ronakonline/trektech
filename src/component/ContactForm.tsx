@@ -4,35 +4,21 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ContactForm = () => {
-  const initialState = {
-    fullName: "",
-    companyName: "",
-    email: "",
-    phone: "",
-    message: "",
-  };
-
-  const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submissions, setSubmissions] = useState<(typeof formData)[]>([]);
 
-  const handleChange = (
-    e: any
-  ) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
-    setErrors((prev) => ({ ...prev, [id]: "" }));
-  };
-
-  const validate = () => {
+  const validate = (form: HTMLFormElement) => {
     const newErrors: Record<string, string> = {};
-    if (!formData.fullName.trim()) newErrors.fullName = "Name is required";
-    if (!formData.companyName.trim())
-      newErrors.companyName = "Company name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    if (!formData.phone.trim()) {
+    const fullName = (form.fullName as HTMLInputElement).value.trim();
+    const companyName = (form.companyName as HTMLInputElement).value.trim();
+    const email = (form.email as HTMLInputElement).value.trim();
+    const phone = (form.phone as HTMLInputElement).value.trim();
+
+    if (!fullName) newErrors.fullName = "Name is required";
+    if (!companyName) newErrors.companyName = "Company name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!phone) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phone.trim())) {
+    } else if (!/^\d{10}$/.test(phone)) {
       newErrors.phone = "Phone number must be exactly 10 digits";
     }
 
@@ -40,25 +26,33 @@ const ContactForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Form submitted:", formData);
+    const form = e.currentTarget;
 
-      // Save to list
-      setSubmissions((prev) => [...prev, formData]);
-
-      toast.success("Form submitted successfully!", { position: "top-center" });
-
-      setFormData(initialState);
+    if (!validate(form)) {
+      return; // stop execution silently (no error toast)
     }
+
+    // Show success toast only when validation passes
+    toast.success("Form submitted successfully!", {
+      position: "top-center",
+    });
+
+    // Let Formspree handle the submission
+    e.currentTarget.submit();
   };
 
   const fields = [
-    { id: "fullName", label: "Name", type: "text" },
-    { id: "companyName", label: "Company Name", type: "text" },
-    { id: "email", label: "Email", type: "email" },
-    { id: "phone", label: "Phone No", type: "tel" },
+    { id: "fullName", label: "Name", type: "text", name: "fullName" },
+    {
+      id: "companyName",
+      label: "Company Name",
+      type: "text",
+      name: "companyName",
+    },
+    { id: "email", label: "Email", type: "email", name: "email" },
+    { id: "phone", label: "Phone No", type: "tel", name: "phone" },
   ];
 
   return (
@@ -133,21 +127,22 @@ const ContactForm = () => {
           <div className="col-md-6">
             <form
               className="formPage bg-white p-4 shadow"
+              action="https://formspree.io/f/xzzakyyb"
+              method="POST"
               onSubmit={handleSubmit}
             >
               <h3 className="skyblue">Contact Us</h3>
 
-              {fields.map(({ id, label, type }) => (
+              {fields.map(({ id, label, type, name }) => (
                 <div className="mb-3" key={id}>
                   <label htmlFor={id} className="form-label fw-bold">
                     {label}
                   </label>
                   <input
                     type={type}
-                    className={`form-control ${errors[id] && "is-invalid"}`}
                     id={id}
-                    value={(formData as any)[id]}
-                    onChange={handleChange}
+                    name={name}
+                    className={`form-control ${errors[id] && "is-invalid"}`}
                   />
                   {errors[id] && (
                     <div className="invalid-feedback">{errors[id]}</div>
@@ -162,8 +157,7 @@ const ContactForm = () => {
                 <textarea
                   className="form-control"
                   id="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  name="message"
                   placeholder="Type your message..."
                 />
               </div>
