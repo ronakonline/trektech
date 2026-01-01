@@ -92,10 +92,10 @@ export const IndustriesService = [
 
 export const LeaderShip = [
   {
-    para: "With over 10 years of experience in the IT services industry, Rani Dharmik brings strategic insight and a client-first mindset to Trek Tech Corp. As Sales Director, she leads our business development and client engagement initiatives, ensuring every solution is aligned with real-world business needs.",
+    para: "With over 10 years of experience in the IT services industry, TrekTech brings strategic insight and a client-first mindset to every engagement. Through its dedicated sales and business development team, TrekTech leads client engagement initiatives, ensuring every solution is aligned with real-world business needs.",
   },
   {
-    para: "Rani is known for her ability to translate complex challenges into practical, results-driven technology strategies. Her deep understanding of industry dynamics and commitment to personalized service make her a trusted advisor to clients across sectors.",
+    para: "TrekTech is known for its ability to translate complex challenges into practical, results-driven technology strategies. The company’s deep understanding of industry dynamics and commitment to personalized service make it a trusted advisor to clients across sectors.",
   },
 ];
 
