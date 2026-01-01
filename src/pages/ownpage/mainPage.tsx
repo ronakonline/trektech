@@ -172,9 +172,6 @@ const MainPage = () => {
       <section className="services p-5">
         <div className="container">
           <h3 className="text-center mb-2 skyblue">Leadership</h3>
-          <p className="text-center milkyWhite fw-bold">
-            Rani Dharmik – Sales Director
-          </p>
 
           <div className="w-75 text-center mx-auto my-3 widthReduce">
             {LeaderShip?.map((each) => (
